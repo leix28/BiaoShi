@@ -1,5 +1,7 @@
 ver = debug
 
+CFLAGS += -std=c++11
+
 ifeq ($(ver), debug)
 CFLAGS += -Ddebug -g
 else
@@ -16,14 +18,14 @@ endif
 SRC = src
 BIN = bin
 OBJ = obj
-OBJS = ${OBJ}/word2vec.o ${OBJ}/transE.o
+OBJS = ${OBJ}/TrainTransE.o ${OBJ}/main.o
 EXE = ${BIN}/main.out
 
 
 all: ${OBJS}
 	${CC} ${CFLAGS} $^ -o ${EXE}
 
-${OBJ}/%.o: ${SRC}/%.c
+${OBJ}/%.o: ${SRC}/%.cpp
 	${CC} ${CFLAGS} -c $< -o $@
 
 clean:

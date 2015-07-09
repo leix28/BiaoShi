@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <string>
 #include <cmath>
+#include <cstring>
 #include <thread>
 #include "header.h"
 
