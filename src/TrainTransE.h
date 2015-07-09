@@ -1,4 +1,6 @@
-#include <iostream>
+#ifndef __BiaoShi_TrainTransE_h__
+#define __BiaoShi_TrainTransE_h__
+
 #include <cstdio>
 #include <cstdlib>
 #include <string>
@@ -12,8 +14,7 @@ private:
 	bool flagL1;
 	unsigned long long nextRandom;
 
-	const real pi=3.1415926535897932384626433832795;
-
+	
 	int n, method;
 	char version[10];
 	int thread;
@@ -52,7 +53,7 @@ private:
 
 	void Clear();
 public:
-	
+
 	TrainTransE();
 
 	void SetN(int inN);
@@ -76,3 +77,5 @@ public:
 	void SetTrainFile(int *fb_h, int *fb_l, int *fb_r, int fb_num);
 	bool Run(real *inEntityVec, real *inRelationVec);
 };
+
+#endif

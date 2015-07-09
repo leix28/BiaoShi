@@ -11,7 +11,7 @@ real TrainTransE::RandInitialize(real min, real max) {
 }
 
 real TrainTransE::NormalDouble(real x, real miu, real sigma) {
-	return 1.0 / sqrt(2 * pi) / sigma * exp( -1 * (x - miu) * (x - miu) / (2 * sigma * sigma));
+	return 1.0 / sqrt(2 * pi) / sigma * exp(-1 * (x - miu) * (x - miu) / (2 * sigma * sigma));
 }
 
 real TrainTransE::RandN(real miu, real sigma, real min, double max) {
@@ -62,6 +62,7 @@ real TrainTransE::CalcSum(int e1, int e2, int rel) {
 			sum += Sqr(entity_vec[e2 * n + ii]-entity_vec[e1 * n + ii]-relation_vec[rel * n + ii]);
 	return sum;
 }
+
 void TrainTransE::Gradient(int e1_a, int e2_a, int rel_a, int e1_b, int e2_b, int rel_b) {
 	for (int ii = 0; ii < n; ii++) {
 		real x = 2 * (entity_vec[e2_a * n + ii]-entity_vec[e1_a * n + ii]-relation_vec[rel_a * n + ii]);
@@ -86,6 +87,7 @@ void TrainTransE::Gradient(int e1_a, int e2_a, int rel_a, int e1_b, int e2_b, in
 		entity_tmp[e2_b * n + ii]+=rate*x;
 	}
 }
+
 void TrainTransE::TrainKb(int e1_a, int e2_a, int rel_a, int e1_b, int e2_b, int rel_b, real &res) {
 	double sum1 = CalcSum(e1_a, e2_a, rel_a);
 	double sum2 = CalcSum(e1_b, e2_b, rel_b);
@@ -101,9 +103,9 @@ int TrainTransE::FindOk(int e1, int e2, int rel) {
 	int k = 0;
 	while (i != j) {
 		mid = (i + j) / 2;
-		if (fb_h[mid] < e1) 
+		if (fb_h[mid] < e1)
 			i = mid + 1;
-		else 
+		else
 			j = mid;
 	}
 	k = i;
@@ -111,18 +113,18 @@ int TrainTransE::FindOk(int e1, int e2, int rel) {
 	j = fb_num-1;
 	while (i != j) {
 		mid = (i + j) / 2 + 1;
-		if (fb_h[mid] > e1) 
+		if (fb_h[mid] > e1)
 			j = mid - 1;
-		else 
+		else
 			i = mid;
 	}
 	i = k;
 	if(i > j) return 0;
 	while (i != j) {
 		mid = (i + j) / 2;
-		if (fb_l[mid] < e2) 
+		if (fb_l[mid] < e2)
 			i = mid + 1;
-		else 
+		else
 			j = mid;
 	}
 	for (;j < fb_num; j++) {
@@ -152,7 +154,7 @@ void TrainTransE::Bfgs() {
 				{
 					while (FindOk(fb_h[i], j, fb_r[i]))
 						j=RandMax(entity_num);
-					
+
 					TrainKb(fb_h[i],fb_l[i],fb_r[i],fb_h[i],j,fb_r[i], res);
 				}
 				else
@@ -171,8 +173,8 @@ void TrainTransE::Bfgs() {
 		}
 		printf("epoch:%d %.6lf\n", epoch, res);
 	}
-	
 }
+
 void TrainTransE::PrintEmbedding() {
 	char relOutput[30]="";
 	char enOutput[30]="";
@@ -313,7 +315,7 @@ bool TrainTransE::Run(real *inEntityVec, real *inRelationVec) {
 
 	printf("Start Run\n");
 	//nepoch=1000/threadnum;
-    
+
 	entity_vec = inEntityVec;
 	relation_vec = inRelationVec;
 
@@ -330,12 +332,11 @@ bool TrainTransE::Run(real *inEntityVec, real *inRelationVec) {
 	}
 
     std::thread *T = new std::thread[thread];
-    
+
     for (int i = 0;i < thread; i++)
         T[i] = std::thread(std::bind(&TrainTransE::Bfgs, this));
-    
-    for (int i = 0; i < thread; i++)
-    {
+
+    for (int i = 0; i < thread; i++) {
         T[i].join();
     }
 
