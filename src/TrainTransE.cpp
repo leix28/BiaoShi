@@ -230,11 +230,11 @@ void TrainTransE::SetN(int inN) {
 	n = inN;
 }
 
-void TrainTransE::SetRate(int inRate) {
+void TrainTransE::SetRate(real inRate) {
 	rate = inRate;
 }
 
-void TrainTransE::SetMargin(int inMargin) {
+void TrainTransE::SetMargin(real inMargin) {
 	margin = inMargin;
 }
 
@@ -313,8 +313,13 @@ void TrainTransE::SetTrainFile(int *fb_h, int *fb_l, int *fb_r, int fb_num) {
 }
 bool TrainTransE::Run(real *inEntityVec, real *inRelationVec) {
 
-	printf("Start Run\n");
 	//nepoch=1000/threadnum;
+	printf("size = %d\n", n);
+	printf("learing rate = %.6lf\n", rate);
+	printf("margin = %.6lf\n", margin);
+	printf("method = %s\n", version);
+	printf("nepoch = %d\n", nepoch);
+
 
 	entity_vec = inEntityVec;
 	relation_vec = inRelationVec;
@@ -324,12 +329,21 @@ bool TrainTransE::Run(real *inEntityVec, real *inRelationVec) {
 		return 1;
 	}
 
+	for (int i = 0; i < entity_num * n; i++) {
+		entity_vec[i] = RandN(0, 1.0 / n, -6 / sqrt(n), 6 / sqrt(n));
+	}
+	for (int i = 0; i < relation_num * n; i++) {
+		relation_vec[i] = RandN(0, 1.0 / n, -6 / sqrt(n), 6 / sqrt(n));
+	}
+
 	for (int i = 0; i < entity_num; i++) {
-		Norm(entity_vec,i * n);
+		Norm(entity_vec, i * n);
 	}
 	for (int i = 0; i < relation_num; i++) {
 		Norm(relation_vec, i * n);
 	}
+
+	printf("Start Run\n");
 
     std::thread *T = new std::thread[thread];
 

@@ -59,9 +59,9 @@ public:
 
 	void SetN(int inN);
 
-	void SetRate(int inRate);
+	void SetRate(real inRate);
 
-	void SetMargin(int inMargin);
+	void SetMargin(real inMargin);
 
 	void SetMethod(int inMethod);
 
