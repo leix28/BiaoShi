@@ -37,11 +37,11 @@ private:
 
 	real RandN(real miu, real sigma, real min, double max);
 
-	real Sqr(real x);
-
-	real VecLen(real *a, int aBegin);
-
-	void Norm(real *a, int aBegin);
+	real Sqr(const real x) const;
+    
+    real VecLen(real *a, const int aBegin) const;
+    
+    void Norm(real *a, const int aBegin);
 
 	int RandMax(int x);
 

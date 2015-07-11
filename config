@@ -2,8 +2,8 @@ transE = abc{
 	train : train.txt;
 	rate : 0.001;
 	margin : 1;
-	npoch : 250;
+	npoch : 1000;
 	method : bern;
-	thread : 4;
+	thread : 1;
 	dimension : 100;
 }
