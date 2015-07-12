@@ -6,6 +6,7 @@
 #include <iostream>
 #include <algorithm>
 #include "TrainTransE.h"
+#include "word2vec.h"
 #include "header.h"
 
 const int BUFFER_SIZE = 100;
@@ -99,12 +100,65 @@ public:
 };
 
 class Word2VecControl:public Control {
+
+private:
+	real rate, sample;
+	int cbow, dimension, binary, window, hs, negative, iter, MinimalCount, thread;
+	std::string trainFile, outputFile;
+	word2vec *work;
+
+public:
 	void AddConfig(std::string title, std::string content) {
-		std::cout<<title<<" "<<content<<std::endl;
+		if (title == "rate") rate = atof(content.c_str()); else
+		if (title == "train") trainFile = content; else
+		if (title == "method") {
+			if (content == "cbow") cbow = 1; else cbow =0;
+		} else
+		if (title == "thread") thread = atoi(content.c_str()); else
+		if (title == "dimension") dimension = atoi(content.c_str()); else
+		if (title == "binary") binary = atoi(content.c_str());
+		if (cbow) rate = 0.05;
+		if (title == "rate") rate = atof(content.c_str()); else
+    	if (title == "output") outputFile = content; else
+    	if (title == "window") window = atoi(content.c_str()); else
+    	if (title == "sample") sample = atof(content.c_str()); else
+    	if (title == "hs") hs = atoi(content.c_str()); else
+    	if (title == "negative") negative = atoi(content.c_str()); else
+    	if (title == "iter") iter = atoi(content.c_str()); else
+    	if (title == "min-count") MinimalCount = atoi(content.c_str());
+	}
+
+	void Init() {
+		work = new word2vec();
+		work->SetDimension(dimension);
+		work->SetTrain(trainFile);
+		work->SetBinary(binary);
+		work->SetMethod(cbow);
+		work->SetRate(rate);
+		work->SetOutput(outputFile);
+		work->SetWindow(window);
+		work->SetHs(hs);
+		work->SetSample(sample);
+		work->SetNegative(negative);
+		work->SetThread(thread);
+		work->SetIter(iter);
+		work->SetMinCount(MinimalCount);
+		work->SetIntial();
+		work->Run();
+
+	}
+
+	void Run() {
+		work->Run();
+	}
+
+	~Word2VecControl() {
+		delete work;
 	}
 };
 
 class TransEControl:public Control {
+
 private:
 	struct arr {
 		int e1, e2, r;
@@ -184,12 +238,6 @@ public:
 		relationVec = (real *)calloc(vocabRelation.size() * dimension , sizeof(real));
 		entityVec = (real *)calloc(vocabEntity.size() * dimension, sizeof(real));
 
-		// FILE *fout=fopen("log.txt","w");
-		// for (int hx=0; hx< fb_num; hx++) {
-		// 	fprintf(fout,"%d %d %d\n",fb_h[hx],fb_l[hx],fb_r[hx]);
-		// }
-		// fclose(fout);
-
 		work = new TrainTransE();
 		work->SetN(dimension);
 		work->SetRate(rate);
@@ -200,17 +248,17 @@ public:
 		work->SetRelationNum(vocabRelation.size());
 		work->SetEntityNum(vocabEntity.size());
 		work->SetTrainFile(fb_h, fb_l, fb_r, fb_num);
-		work->Run(entityVec, relationVec);
 	}
 
 	void Run() {
-
+		work->Run(entityVec, relationVec);
 	}
 
 	~TransEControl() {
 		free(fb_h);
 		free(fb_l);
 		free(fb_r);
+		delete work;
 	}
 };
 
