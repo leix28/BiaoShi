@@ -1,11 +1,11 @@
-ver = debug
+ver = relase
 
 CFLAGS += -std=c++11
 
 ifeq ($(ver), debug)
 CFLAGS += -Ddebug -g
 else
-CFLAGS += -O3 march = native
+CFLAGS += -march=native -O3
 endif
 
 ifeq ($(shell uname -s), Darwin)
