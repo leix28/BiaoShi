@@ -296,7 +296,6 @@ void TrainModelThread(long long id) {
   clock_t start = clock();
   clock_t now;
   unsigned long long next_random = (long long)id;
-      FILE * fout=fopen("check1.txt","w");fclose(fout);
 
   while (1) {
     if (word_count - last_word_count > 10000) {
@@ -493,7 +492,8 @@ int ArgPos(char *str, int argc, char **argv) {
 
   void init() {
     RandomMutiplyNumber = 25214903917, RandomAddNumber = 11, nextRandom = 0;
-    hashSize = 3000000; real hashLimit = 0.7;
+    hashSize = 3000000;
+    hashLimit = 0.7;
     VocabMaxSize = 1000, vocabSize = 0, VocabSizeStep = 1000;
 
     NegativeTableSize = 1e8;
@@ -535,6 +535,10 @@ int ArgPos(char *str, int argc, char **argv) {
     if ((i = ArgPos((char *)"-min-count", argc, argv)) > 0) MinimalCount = atoi(argv[i + 1]);
   }
 
+  real* GetEmbedding() {
+    return syn0;
+  }
+
   void SetIntial() {
     Initial();
     LoadFromTrainFile(trainFile);
@@ -547,10 +551,6 @@ int ArgPos(char *str, int argc, char **argv) {
 
   void SetDimension(int dimension) {
     this->dimension = dimension;
-  }
-
-  void SetTrain(char *trainFile) {
-    strcpy(this->trainFile, trainFile);
   }
 
   void SetBinary(int binary) {
@@ -566,6 +566,10 @@ int ArgPos(char *str, int argc, char **argv) {
     this->alpha = con;
   }
 
+  void SetTrain(char *trainFile) {
+    strcpy(this->trainFile, trainFile);
+  }
+
   void SetOutput(char *output) {
     strcpy(this->outputFile, output);
   }
@@ -577,7 +581,6 @@ int ArgPos(char *str, int argc, char **argv) {
   void SetOutput(std::string output) {
     strcpy(this->outputFile, output.c_str());
   }
-
 
   void SetWindow(int con) {
     this->window = con;

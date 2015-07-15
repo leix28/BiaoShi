@@ -294,24 +294,12 @@ void TrainTransE::SetTrainFile(int *fb_h, int *fb_l, int *fb_r, int fb_num) {
     
     
 }
-bool TrainTransE::Run(real *inEntityVec, real *inRelationVec) {
-    
-    //nepoch=1000/threadnum;
-    printf("size = %d\n", n);
-    printf("learing rate = %.6lf\n", rate);
-    printf("margin = %.6lf\n", margin);
-    printf("method = %s\n", version);
-    printf("nepoch = %d\n", nepoch);
-    
-    
+
+void TrainTransE::SetRandom(real *inEntityVec, real *inRelationVec) {
+
     entity_vec = inEntityVec;
     relation_vec = inRelationVec;
-    
-    if(entity_num == 0 || relation_num == 0) {
-        printf("None Entity or Relation\n");
-        return 1;
-    }
-    
+
     for (int i = 0; i < entity_num * n; i++) {
         entity_vec[i] = RandN(0, 1.0 / n, -6 / sqrt(n), 6 / sqrt(n));
     }
@@ -325,8 +313,27 @@ bool TrainTransE::Run(real *inEntityVec, real *inRelationVec) {
     for (int i = 0; i < relation_num; i++) {
         Norm(relation_vec, i * n);
     }
+
+}
+
+bool TrainTransE::Run(real *inEntityVec, real *inRelationVec) {
+    
+    //nepoch=1000/threadnum;
+    printf("size = %d\n", n);
+    printf("learing rate = %.6lf\n", rate);
+    printf("margin = %.6lf\n", margin);
+    printf("method = %s\n", version);
+    printf("nepoch = %d\n", nepoch);
+        
+    if(entity_num == 0 || relation_num == 0) {
+        printf("None Entity or Relation\n");
+        return 1;
+    }
     
     printf("Start Run\n");
+
+    entity_vec = inEntityVec;
+    relation_vec = inRelationVec;
     
     std::thread *T = new std::thread[thread];
     

@@ -12,7 +12,7 @@ ifeq ($(shell uname -s), Darwin)
 CC = clang++
 else
 CC = g++
-CFLAGS += -pthread
+CFLAGS += -pthread -g
 endif
 
 SRC = src

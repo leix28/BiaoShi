@@ -73,6 +73,8 @@ public:
 
 	void SetEntityNum(int inEntityNum);
 
+	void SetRandom(real *inEntityVec, real *inRelationVec);
+
 	~TrainTransE();
 
 	void SetTrainFile(int *fb_h, int *fb_l, int *fb_r, int fb_num);
