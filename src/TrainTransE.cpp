@@ -188,6 +188,10 @@ void TrainTransE::Clear() {
     free(entity_tmp);
     free(left_num);
     free(right_num);
+    relation_tmp = NULL;
+    entity_tmp = NULL;
+    left_num = NULL;
+    right_num = NULL;
 }
 
 TrainTransE::TrainTransE() {
@@ -203,7 +207,11 @@ TrainTransE::TrainTransE() {
     relation_num = 0;
     memset(version, 0, sizeof(version));
     memcpy(version, "bern", sizeof(char) * 4);
-    
+
+    relation_tmp = NULL;
+    entity_tmp = NULL;
+    left_num = NULL;
+    right_num = NULL;
     
 }
 
@@ -252,6 +260,7 @@ TrainTransE::~TrainTransE() {
 }
 
 void TrainTransE::SetTrainFile(int *fb_h, int *fb_l, int *fb_r, int fb_num) {
+    clear();
     this->fb_num = fb_num;
     this->fb_h = fb_h;
     this->fb_l = fb_l;
@@ -340,7 +349,6 @@ bool TrainTransE::Run(real *inEntityVec, real *inRelationVec) {
     delete[] T;
     
     PrintEmbedding();
-    Clear();
     
     return 0;
 }
